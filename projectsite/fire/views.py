@@ -21,13 +21,15 @@ class ChartView(ListView):
 
 
 def map_station(request):
-    fire_station = FireStation.objects.values('name', 'latitude', 'longitude')
+    fireStations = FireStation.objects.values('name', 'latitude', 'longitude')
 
-    for fs in fire_stations:
+    for fs in fireStations:
         fs['latitude'] = float(fs['latitude'])
         fs['longitude'] = float(fs['longitude'])
+    
+    fireStation_list = list(fireStations)
 
     context = {
-        'fire_station': fire_station_list,  
+        'fireStation': fireStation_list,  
     }
     return render(request, 'map_station.html', context)
