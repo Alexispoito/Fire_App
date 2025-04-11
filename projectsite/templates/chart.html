@@ -229,6 +229,206 @@
     })
     .catch((error) => console.error("Error:", error));
 
+    //   multiLine
+    fetch("/multilineChart/")
+    .then((response) => response.json())
+    .then((result_with_month_names) => {
+      var countries = Object.keys(result_with_month_names);
+      // Extract incident counts for each country
+      var incidentCounts = [];
+      var incidentCounts2 = [];
+      var incidentCounts3 = [];
+
+      // Sort function to sort object keys by month
+      function sortObjectKeys(obj) {
+        return Object.keys(obj).sort((a, b) => parseInt(a) - parseInt(b));
+      }
+
+      // Check if data for each country exists and extract incident counts
+      if (countries.length >= 1) {
+        var country1_data = result_with_month_names[countries[0]];
+        var sortedKeys1 = sortObjectKeys(country1_data);
+        incidentCounts = sortedKeys1.map((key) => country1_data[key]);
+      }
+      if (countries.length >= 2) {
+        var country2_data = result_with_month_names[countries[1]];
+        var sortedKeys2 = sortObjectKeys(country2_data);
+        incidentCounts2 = sortedKeys2.map((key) => country2_data[key]);
+      }
+      if (countries.length >= 3) {
+        var country3_data = result_with_month_names[countries[2]];
+        var sortedKeys3 = sortObjectKeys(country3_data);
+        incidentCounts3 = sortedKeys3.map((key) => country3_data[key]);
+      }
+
+      var multipleLineChart = document.getElementById("multipleLineChart").getContext("2d");
+
+      new Chart(multipleLineChart, {
+        type: "line",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [
+            {
+              label: countries[0],
+              borderColor: "#1d7af3",
+              pointBorderColor: "#FFF",
+              pointBackgroundColor: "#1d7af3",
+              pointBorderWidth: 2,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 1,
+              pointRadius: 4,
+              backgroundColor: "transparent",
+              fill: true,
+              borderWidth: 2,
+              data: incidentCounts,
+            },
+            {
+              label: countries[1],
+              borderColor: "#59d05d",
+              pointBorderColor: "#FFF",
+              pointBackgroundColor: "#59d05d",
+              pointBorderWidth: 2,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 1,
+              pointRadius: 4,
+              backgroundColor: "transparent",
+              fill: true,
+              borderWidth: 2,
+              data: incidentCounts2,
+            },
+            {
+              label: countries[2],
+              borderColor: "#f3545d",
+              pointBorderColor: "#FFF",
+              pointBackgroundColor: "#f3545d",
+              pointBorderWidth: 2,
+              pointHoverRadius: 4,
+              pointHoverBorderWidth: 1,
+              pointRadius: 4,
+              backgroundColor: "transparent",
+              fill: true,
+              borderWidth: 2,
+              data: incidentCounts3,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            position: "top",
+          },
+          tooltips: {
+            bodySpacing: 4,
+            mode: "nearest",
+            intersect: 0,
+            position: "nearest",
+            xPadding: 10,
+            yPadding: 10,
+            caretPadding: 10,
+          },
+          layout: {
+            padding: { left: 15, right: 15, top: 15, bottom: 15 },
+          },
+        },
+      });
+    })
+    .catch((error) => console.error("Error:", error));
+
+//   multiBarChart
+fetch("/multiBarChart/")
+      .then((response) => response.json())
+      .then((result) => {
+        var severitylevel = Object.keys(result);
+        // Extract incident counts for each country
+        var incidentCount_major = [];
+        var incidentCounts_minor = [];
+        var incidentCounts_moderate = [];
+
+        var months = Object.keys(result);
+        var counts = Object.values(result);
+
+        // Sort function to sort object keys by month
+        function sortObjectKeys(obj) {
+          return Object.keys(obj).sort((a, b) => parseInt(a) - parseInt(b));
+        }
+
+        // Check if data for each country exists and extract incident counts
+        if (severitylevel.length >= 1) {
+          var sl1_data = result[severitylevel[0]];
+          var sortedKeys1 = sortObjectKeys(sl1_data);
+          incidentCount_major = sortedKeys1.map((key) => sl1_data[key]);
+        }
+        if (severitylevel.length >= 2) {
+          var sl2_data = result[severitylevel[1]];
+          var sortedKeys2 = sortObjectKeys(sl2_data);
+          incidentCount_minor = sortedKeys2.map((key) => sl2_data[key]);
+        }
+        if (severitylevel.length >= 3) {
+          var sl3_data = result[severitylevel[2]];
+          var sortedKeys3 = sortObjectKeys(sl3_data);
+          incidentCount_moderate = sortedKeys3.map((key) => sl3_data[key]);
+        }
+
+        var multipleBarChart = document.getElementById("multipleBarChart").getContext("2d");
+
+        new Chart(multipleBarChart, {
+          type: "bar",
+          data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            datasets: [
+              {
+                label: "Minor Fire",
+                backgroundColor: "#59d05d",
+                borderColor: "#59d05d",
+                data: incidentCount_minor,
+              },
+              {
+                label: "Moderate Fire",
+                backgroundColor: "#fdaf4b",
+                borderColor: "#fdaf4b",
+                data: incidentCount_moderate,
+              },
+              {
+                label: "Major Fire",
+                backgroundColor: "#177dff",
+                borderColor: "#177dff",
+                data: incidentCount_major,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+              position: "bottom",
+            },
+            title: {
+              display: true,
+              text: "Fire Incidents by Severity Level",
+            },
+            tooltips: {
+              mode: "index",
+              intersect: false,
+            },
+            responsive: true,
+            scales: {
+              xAxes: [
+                {
+                  stacked: true,
+                },
+              ],
+              yAxes: [
+                {
+                  stacked: true,
+                },
+              ],
+            },
+          },
+        });
+      })
+      .catch((error) => console.error("Error:", error));
+
    }
    loadChartData();
 
@@ -238,8 +438,8 @@
         doughnutChart = document.getElementById("doughnutChart").getContext("2d"),
         radarChart = document.getElementById("radarChart").getContext("2d"),
         bubbleChart = document.getElementById("bubbleChart").getContext("2d"),
-        multipleLineChart = document.getElementById("multipleLineChart").getContext("2d"),
-        multipleBarChart = document.getElementById("multipleBarChart").getContext("2d"),
+//        multipleLineChart = document.getElementById("multipleLineChart").getContext("2d"),
+//        multipleBarChart = document.getElementById("multipleBarChart").getContext("2d"),
         htmlLegendsChart = document.getElementById("htmlLegendsChart").getContext("2d");
 
     // var myLineChart = new Chart(lineChart, {
@@ -468,128 +668,128 @@
       },
     },
   });
-  var myMultipleLineChart = new Chart(multipleLineChart, {
-  type: "line",
-  data: {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    datasets: [
-      {
-        label: "Python",
-        borderColor: "#1d7af3",
-        pointBorderColor: "#FFF",
-        pointBackgroundColor: "#1d7af3",
-        pointBorderWidth: 2,
-        pointHoverRadius: 4,
-        pointHoverBorderWidth: 1,
-        pointRadius: 4,
-        backgroundColor: "transparent",
-        fill: true,
-        borderWidth: 2,
-        data: [30, 45, 45, 68, 69, 90, 100, 158, 177, 200, 245, 256],
-      },
-      {
-        label: "PHP",
-        borderColor: "#59d05d",
-        pointBorderColor: "#FFF",
-        pointBackgroundColor: "#59d05d",
-        pointBorderWidth: 2,
-        pointHoverRadius: 4,
-        pointHoverBorderWidth: 1,
-        pointRadius: 4,
-        backgroundColor: "transparent",
-        fill: true,
-        borderWidth: 2,
-        data: [10, 20, 55, 75, 80, 48, 59, 55, 23, 107, 60, 87],
-      },
-      {
-        label: "Ruby",
-        borderColor: "#f3545d",
-        pointBorderColor: "#FFF",
-        pointBackgroundColor: "#f3545d",
-        pointBorderWidth: 2,
-        pointHoverRadius: 4,
-        pointHoverBorderWidth: 1,
-        pointRadius: 4,
-        backgroundColor: "transparent",
-        fill: true,
-        borderWidth: 2,
-        data: [10, 30, 58, 79, 90, 105, 117, 160, 185, 210, 185, 194],
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    legend: {
-      position: "top",
-    },
-    tooltips: {
-      bodySpacing: 4,
-      mode: "nearest",
-      intersect: 0,
-      position: "nearest",
-      xPadding: 10,
-      yPadding: 10,
-      caretPadding: 10,
-    },
-    layout: {
-      padding: { left: 15, right: 15, top: 15, bottom: 15 },
-    },
-  },
-});
-var myMultipleBarChart = new Chart(multipleBarChart, {
-  type: "bar",
-  data: {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    datasets: [
-      {
-        label: "First time visitors",
-        backgroundColor: "#59d05d",
-        borderColor: "#59d05d",
-        data: [95, 100, 112, 101, 144, 159, 178, 156, 188, 190, 210, 245],
-      },
-      {
-        label: "Visitors",
-        backgroundColor: "#fdaf4b",
-        borderColor: "#fdaf4b",
-        data: [145, 256, 244, 233, 210, 279, 287, 253, 287, 299, 312, 356],
-      },
-      {
-        label: "Pageview",
-        backgroundColor: "#177dff",
-        borderColor: "#177dff",
-        data: [185, 279, 273, 287, 234, 312, 322, 286, 301, 320, 346, 399],
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    legend: {
-      position: "bottom",
-    },
-    title: {
-      display: true,
-      text: "Traffic Stats",
-    },
-    tooltips: {
-      mode: "index",
-      intersect: false,
-    },
-    scales: {
-      xAxes: [
-        {
-          stacked: true,
-        },
-      ],
-      yAxes: [
-        {
-          stacked: true,
-        },
-      ],
-    },
-  },
-});
+//   var myMultipleLineChart = new Chart(multipleLineChart, {
+//   type: "line",
+//   data: {
+//     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+//     datasets: [
+//       {
+//         label: "Python",
+//         borderColor: "#1d7af3",
+//         pointBorderColor: "#FFF",
+//         pointBackgroundColor: "#1d7af3",
+//         pointBorderWidth: 2,
+//         pointHoverRadius: 4,
+//         pointHoverBorderWidth: 1,
+//         pointRadius: 4,
+//         backgroundColor: "transparent",
+//         fill: true,
+//         borderWidth: 2,
+//         data: [30, 45, 45, 68, 69, 90, 100, 158, 177, 200, 245, 256],
+//       },
+//       {
+//         label: "PHP",
+//         borderColor: "#59d05d",
+//         pointBorderColor: "#FFF",
+//         pointBackgroundColor: "#59d05d",
+//         pointBorderWidth: 2,
+//         pointHoverRadius: 4,
+//         pointHoverBorderWidth: 1,
+//         pointRadius: 4,
+//         backgroundColor: "transparent",
+//         fill: true,
+//         borderWidth: 2,
+//         data: [10, 20, 55, 75, 80, 48, 59, 55, 23, 107, 60, 87],
+//       },
+//       {
+//         label: "Ruby",
+//         borderColor: "#f3545d",
+//         pointBorderColor: "#FFF",
+//         pointBackgroundColor: "#f3545d",
+//         pointBorderWidth: 2,
+//         pointHoverRadius: 4,
+//         pointHoverBorderWidth: 1,
+//         pointRadius: 4,
+//         backgroundColor: "transparent",
+//         fill: true,
+//         borderWidth: 2,
+//         data: [10, 30, 58, 79, 90, 105, 117, 160, 185, 210, 185, 194],
+//       },
+//     ],
+//   },
+//   options: {
+//     responsive: true,
+//     maintainAspectRatio: false,
+//     legend: {
+//       position: "top",
+//     },
+//     tooltips: {
+//       bodySpacing: 4,
+//       mode: "nearest",
+//       intersect: 0,
+//       position: "nearest",
+//       xPadding: 10,
+//       yPadding: 10,
+//       caretPadding: 10,
+//     },
+//     layout: {
+//       padding: { left: 15, right: 15, top: 15, bottom: 15 },
+//     },
+//   },
+// });
+// var myMultipleBarChart = new Chart(multipleBarChart, {
+//   type: "bar",
+//   data: {
+//     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+//     datasets: [
+//       {
+//         label: "First time visitors",
+//         backgroundColor: "#59d05d",
+//         borderColor: "#59d05d",
+//         data: [95, 100, 112, 101, 144, 159, 178, 156, 188, 190, 210, 245],
+//       },
+//       {
+//         label: "Visitors",
+//         backgroundColor: "#fdaf4b",
+//         borderColor: "#fdaf4b",
+//         data: [145, 256, 244, 233, 210, 279, 287, 253, 287, 299, 312, 356],
+//       },
+//       {
+//         label: "Pageview",
+//         backgroundColor: "#177dff",
+//         borderColor: "#177dff",
+//         data: [185, 279, 273, 287, 234, 312, 322, 286, 301, 320, 346, 399],
+//       },
+//     ],
+//   },
+//   options: {
+//     responsive: true,
+//     maintainAspectRatio: false,
+//     legend: {
+//       position: "bottom",
+//     },
+//     title: {
+//       display: true,
+//       text: "Traffic Stats",
+//     },
+//     tooltips: {
+//       mode: "index",
+//       intersect: false,
+//     },
+//     scales: {
+//       xAxes: [
+//         {
+//           stacked: true,
+//         },
+//       ],
+//       yAxes: [
+//         {
+//           stacked: true,
+//         },
+//       ],
+//     },
+//   },
+// });
   // Chart with HTML Legends
 
   var gradientStroke = htmlLegendsChart.createLinearGradient(500, 0, 100, 0);
