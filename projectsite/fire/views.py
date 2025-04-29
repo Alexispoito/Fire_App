@@ -186,3 +186,18 @@ def map_station(request):
         'fireStation': fireStation_list,  
     }
     return render(request, 'map_station.html', context)
+
+def map_incident(request):
+    fireIncidents = Locations.objects.values('name', 'latitude', 'longitude')
+
+    for fs in fireIncidents:
+        fs['latitude'] = float(fs['latitude'])
+        fs['longitude'] = float(fs['longitude'])
+
+    fireIncidents_list = list(fireIncidents)  # Corrected variable name
+
+    context = {
+        'fireIncidents': fireIncidents_list,  # Corrected variable name
+    }
+
+    return render(request, 'map_incident.html', context)

@@ -4,7 +4,7 @@
 
 <div class="page-inner">
   <div class="page-header">
-    <h4 class="page-title">Stations</h4>
+    <h4 class="page-title">Incident</h4>
     <ul class="breadcrumbs">
       <li class="nav-home">
         <a href="">
@@ -21,7 +21,7 @@
         <i class="flaticon-right-arrow"></i>
       </li>
       <li class="nav-item">
-        <a href="">Stations</a>
+        <a href="">Incidents</a>
       </li>
     </ul>
   </div>
@@ -29,7 +29,7 @@
   <div class="col-md-12">
     <div class="card card-transparent">
       <div class="card-header">
-        <h4 class="card-title text-center">Fire Stations</h4>
+        <h4 class="card-title text-center">Map Incidents</h4>
         <p class="card-category text-center">
           Looks great on any resolution. Made by our friends from
           <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>.
@@ -53,20 +53,17 @@
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    var truckIcon = L.icon({
-    iconUrl: "{% static 'img/firetruck.png' %}",
+    var FireIcon = L.icon({
+    iconUrl: "{% static 'img/fireheart.png' %}",
     iconSize: [50, 50]
     });
 
-  // Example marker using truck icon
-    L.marker([9.83369118406607, 118.72275445554], { icon: truckIcon }).addTo(map)
-        .bindPopup("Sta. Lourdes");
+  // Example marker using fireheart icon
+    L.marker([9.7622, 118.7485], { icon: FireIcon }).addTo(map)
+        .bindPopup("Puerto Princesa City Coliseum");
 
-    L.marker([9.82084079557777, 118.74401369655], { icon: truckIcon }).addTo(map)
-        .bindPopup("Tagburos");
-
-    L.marker([9.79555573875096, 118.710565836493], { icon: truckIcon }).addTo(map)
-        .bindPopup("Sicsican");
+    L.marker([9.7691, 118.7471], { icon: FireIcon }).addTo(map)
+        .bindPopup("Robinsons Place Palawan");
 
 </script>
 
