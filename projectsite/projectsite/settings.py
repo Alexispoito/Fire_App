@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "fire",
     "widget_tweaks",
+    "boats",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
